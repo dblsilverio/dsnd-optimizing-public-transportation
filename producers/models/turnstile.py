@@ -41,12 +41,12 @@ class Turnstile(Producer):
     def run(self, timestamp, time_step):
         """Simulates riders entering through the turnstile."""
         num_entries = self.turnstile_hardware.get_entries(timestamp, time_step)
-        timestamp_ms = int(timestamp.timestamp() * 1000)
 
-        key = {"timestamp": timestamp_ms}
         value = self._build_turnstile()
+        logger.debug(f"{num_entries} entries for  tation {self.station.name}")
 
-        for _ in range(0, num_entries):
+        for _ in range(num_entries):
+            key = {"timestamp": self.time_millis()}
             self._produce(key, value)
 
         logger.debug(f"Recorded {num_entries} entries for turnstiles at {self.station.name}")

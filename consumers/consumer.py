@@ -48,7 +48,8 @@ class KafkaConsumer:
         """Callback for when topic assignment takes place"""
 
         for partition in partitions:
-            partition.offset = OFFSET_BEGINNING
+            if self.offset_earliest:
+                partition.offset = OFFSET_BEGINNING
 
         logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
